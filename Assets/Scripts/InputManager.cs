@@ -47,11 +47,19 @@ public class InputManager : MonoBehaviour
             char[] delims = { ' ' };
             string[] parts = input.ToLower().Split(delims); //parts[0] command, parts[1] is direction or thing picking up
 
-            if(parts.Length > 0)
+            if(parts.Length >= 2)
             { 
                 if (commands.Contains(parts[0])) //command is valid
                 {
                     UpdateStory(input);
+                    if (parts[0] == "go")
+                    {
+                        if (NavigationManager.instance.SwitchRooms(parts[1]))
+                            ;
+                        else
+                            UpdateStory("Direction does not exist. Please try again.");
+                    }
+
                     Debug.Log("Modifying story - correct command");
                 }
                 else //command not valid
