@@ -57,10 +57,19 @@ public class InputManager : MonoBehaviour
                         if (NavigationManager.instance.SwitchRooms(parts[1]))
                             ;
                         else
-                            UpdateStory("Direction does not exist. Please try again.");
+                            UpdateStory("Direction does not exist or is locked. Please try again.");
+                    }else if(parts[0] == "get")
+                    {
+                        if (NavigationManager.instance.getItem(parts[1]))
+                        {
+                            GameManager.instance.inventory.Add(parts[1]);
+                            UpdateStory("You added a(n) " + parts[1] + " to your inventory.");
+                        }
+                        else
+                            UpdateStory("Sorry, " + parts[1] + " not found in this room.");
                     }
 
-                    Debug.Log("Modifying story - correct command");
+                    //Debug.Log("Modifying story - correct command");
                 }
                 else //command not valid
                 {

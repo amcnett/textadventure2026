@@ -16,3 +16,5 @@ MonoBehaviour:
   description: 'Hey! There''s a key in here. '
   exits:
   - {fileID: 11400000, guid: 38c75638c005c5140a7edd7fac396d5e, type: 2}
+  items:
+  - key
