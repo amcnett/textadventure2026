@@ -13,6 +13,7 @@ public class InputManager : MonoBehaviour
     public TMP_InputField userInput; // the input field object
     public TMP_Text inputText; // part of the input field where user enters response
     public TMP_Text placeHolderText; // part of the input field for initial placeholder text
+    public ScrollRect scrollRect; // controls how our story scrolls
     
     private string story; // holds the story to display
     private List<string> commands = new List<string>();
@@ -31,9 +32,18 @@ public class InputManager : MonoBehaviour
     {
         commands.Add("go");
         commands.Add("get");
+        commands.Add("restart");
 
         story = storyText.text;
         userInput.onEndEdit.AddListener(GetInput);
+
+        //NavigationManager.instance.onRestart += someFunction;
+    }
+
+    IEnumerator ScrollToBottom() { 
+         yield return new WaitForEndOfFrame(); // wait until after the text is updated in the UI
+
+        scrollRect.verticalNormalizedPosition = 0f; // move to bottom (scroll)
     }
 
     void GetInput(string input)
@@ -58,7 +68,8 @@ public class InputManager : MonoBehaviour
                             ;
                         else
                             UpdateStory("Direction does not exist or is locked. Please try again.");
-                    }else if(parts[0] == "get")
+                    }
+                    else if (parts[0] == "get")
                     {
                         if (NavigationManager.instance.getItem(parts[1]))
                         {
@@ -68,6 +79,8 @@ public class InputManager : MonoBehaviour
                         else
                             UpdateStory("Sorry, " + parts[1] + " not found in this room.");
                     }
+                    else if (parts[0] == "restart")
+                        NavigationManager.instance.GameRestart();
 
                     //Debug.Log("Modifying story - correct command");
                 }
@@ -83,5 +96,6 @@ public class InputManager : MonoBehaviour
     {
         story += "\n" + msg;
         storyText.text = story;
+        StartCoroutine("ScrollToBottom");
     }
 }

@@ -9,6 +9,7 @@ public class NavigationManager : MonoBehaviour
     public Room startingRoom;
     public Room currentRoom;
     public Exit toKeyNorth;
+
     public delegate void Restart();
     public event Restart onRestart;
 
@@ -47,10 +48,20 @@ public class NavigationManager : MonoBehaviour
 
         if(currentRoom.name == "dragon")
         {
-            onRestart.Invoke(); // calling my restart event to happen
+            /*onRestart.Invoke(); // calling my restart event to happen
             currentRoom = startingRoom; //puts player back to starting point
-            Unpack();
+            Unpack();*/
+            GameRestart();
         }
+    }
+
+    public void GameRestart()
+    {
+        onRestart.Invoke(); // calling my restart event to happen
+        currentRoom = startingRoom; //puts player back to starting point
+        toKeyNorth.isHidden = true;
+        Unpack();
+
     }
 
     public bool SwitchRooms(string direction)
