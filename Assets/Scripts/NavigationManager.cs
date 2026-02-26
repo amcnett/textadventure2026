@@ -9,6 +9,7 @@ public class NavigationManager : MonoBehaviour
     public Room startingRoom;
     public Room currentRoom;
     public Exit toKeyNorth;
+    public List<Room> rooms; // will allow nav manage to have access to all rooms
 
     public delegate void Restart();
     public event Restart onRestart;
@@ -29,7 +30,7 @@ public class NavigationManager : MonoBehaviour
     void Start()
     {
         currentRoom = startingRoom;
-        Unpack();
+        //Unpack();
     }
     void Unpack()
     {
@@ -62,6 +63,12 @@ public class NavigationManager : MonoBehaviour
         toKeyNorth.isHidden = true;
         Unpack();
 
+    }
+
+    public void SwitchRooms(Room room)
+    {
+        currentRoom = room;
+        Unpack();
     }
 
     public bool SwitchRooms(string direction)
@@ -112,6 +119,14 @@ public class NavigationManager : MonoBehaviour
         }
 
         return isFound; // item not found in room
+    }
+
+    public Room GetRoomByName(string name)
+    {
+        foreach(Room aroom in rooms)
+            if (aroom.name == name)
+                return aroom;
+        return null; // room not found
     }
    
 }

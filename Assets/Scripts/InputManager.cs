@@ -33,6 +33,7 @@ public class InputManager : MonoBehaviour
         commands.Add("go");
         commands.Add("get");
         commands.Add("restart");
+        commands.Add("save");
 
         story = storyText.text;
         userInput.onEndEdit.AddListener(GetInput);
@@ -52,13 +53,13 @@ public class InputManager : MonoBehaviour
         userInput.text = "";
         userInput.ActivateInputField();
 
-        if(input != "")
+        if (input != "")
         {
             char[] delims = { ' ' };
             string[] parts = input.ToLower().Split(delims); //parts[0] command, parts[1] is direction or thing picking up
 
-            if(parts.Length >= 2)
-            { 
+            if (parts.Length >= 2)
+            {
                 if (commands.Contains(parts[0])) //command is valid
                 {
                     UpdateStory(input);
@@ -79,17 +80,23 @@ public class InputManager : MonoBehaviour
                         else
                             UpdateStory("Sorry, " + parts[1] + " not found in this room.");
                     }
-                    else if (parts[0] == "restart")
-                        NavigationManager.instance.GameRestart();
-
-                    //Debug.Log("Modifying story - correct command");
+                }
+            }// two parts end
+            else if (parts.Length == 1)
+            {
+                if (parts[0] == "restart")
+                    NavigationManager.instance.GameRestart();
+                else if (parts[0] == "save")
+                {
+                    GameManager.instance.Save();
+                    UpdateStory("Progress saved!");
                 }
                 else //command not valid
                 {
                     UpdateStory("Invalid command. Please try again.");
                 }
-            }
-        }
+            }// one part end
+        } // no empty end
     }
 
     public void UpdateStory(string msg)
